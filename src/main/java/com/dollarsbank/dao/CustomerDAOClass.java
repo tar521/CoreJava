@@ -22,6 +22,7 @@ public class CustomerDAOClass implements CustomerDAO{
 		return user;
 	}
 
+	@Override
 	public void setUser(Customer user) {
 		this.user = user;
 	}

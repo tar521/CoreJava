@@ -78,4 +78,17 @@ public class AccountDAOClass implements AccountDAO{
 		return false;
 	}
 
+	@Override
+	public void signOut() {
+		accounts = null;
+	}
+	
+	@Override
+	public String toString() {
+		String result = "";
+		for (SavingsAccount s : accounts) {
+			result = result + s.toString();
+		}
+		return result;
+	}
 }

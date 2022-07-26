@@ -62,6 +62,7 @@ public class DollarsBankController {
 					}
 					if (login == 1) {
 						// MAIN MENU
+						session();
 					}
 				}
 				
@@ -218,6 +219,64 @@ public class DollarsBankController {
 			
 			
 		}while (true);
+	}
+	
+	private void session() {
+		do {
+			System.out.println();
+			DollarsBankApplication.mainMenu();
+			try {
+				int option = sc.nextInt();
+				sc.nextLine();
+				
+				switch (option) {
+				case 1: // Deposit
+					
+					break;
+				case 2: // Withdraw
+					break;
+				case 3: // Funds transfer
+					break;
+				case 4: // view trans
+					System.out.println("5 Most Recent Transactions:\n");
+					System.out.println(transDAO.getTransactions());
+					break;
+				case 5: // view customer info
+					System.out.println(custDAO.getUser());
+					break;
+				case 6:
+					custDAO.setUser(null);
+					accDAO.signOut();
+					transDAO.signOut();
+					System.out.println("\nSigning Out...\n");
+					return;
+				default:
+					throw new IllegalOptionException();
+				}
+			}catch(InputMismatchException e) {
+				System.out.println("\nInvalid input - Please input a listed option\n");
+				sc.nextLine();
+			}catch(IllegalOptionException e) {
+				System.out.println("\nNot a listed option - Please input a listed option\n");
+			}
+			
+			
+		}while(true);
+	}
+	
+	private void accountAction(String action) {
+		String menu = action.replaceAll("[a-zA-Z]+", "-");
+		System.out.println();
+		System.out.println("+-" + menu + "--------+");
+		System.out.println("| " + action + " Wizard |");
+		System.out.println("+-" + menu + "--------+");
+		
+		System.out.println("Select Account for " + action);
+		System.out.println(accDAO);
+		System.out.print("Account ID: ");
+		
+		int option = sc.nextInt();
+		
 	}
 
 }

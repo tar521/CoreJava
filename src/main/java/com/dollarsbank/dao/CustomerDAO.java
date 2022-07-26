@@ -15,4 +15,6 @@ public interface CustomerDAO {
 	public boolean uniqueUsername(String temp);
 
 	public boolean addCustomer(Customer newCust);
+
+	public void setUser(Customer user);
 }

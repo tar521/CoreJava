@@ -11,4 +11,6 @@ public interface AccountDAO {
 
 	public boolean addAccount(String username,SavingsAccount acc);
 
+	void signOut();
+
 }

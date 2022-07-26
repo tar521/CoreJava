@@ -71,4 +71,19 @@ public class Customer {
 		this.phone = phone;
 	}
 
+	@Override
+	public String toString() {
+		return "\nCONTACT INFO:"
+				+ "\nName:        \t" + name
+				+ "\nAddress:     \t" + address
+				+ "\nPhone #:     \t" + phone
+				
+				+ "\n\nACCOUNT INFO:"
+				+ "\nCustomer ID: \t" + id
+				+ "\nUsername:    \t" + username
+				+ "\nPassword:    \t" + password
+				+ "\n";
+	}
+
+	
 }

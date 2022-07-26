@@ -20,6 +20,11 @@ public class TransactionDAOClass implements TransactionDAO {
 	}
 	
 	private List<Transactions> transactions;
+	
+	@Override
+	public List<Transactions> getTransactions() {
+		return transactions;
+	}
 
 	@Override
 	public void setTransactions(int id) throws SQLException {
@@ -101,4 +106,11 @@ public class TransactionDAOClass implements TransactionDAO {
 		}
 		return false;
 	}
+	
+	@Override
+	public void signOut() {
+		transactions = null;
+	}
+
+	
 }

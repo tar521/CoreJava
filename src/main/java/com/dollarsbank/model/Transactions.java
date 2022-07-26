@@ -71,7 +71,7 @@ public class Transactions {
 				+ timestamp.getMonth() + " "
 				+ timestamp.getDayOfMonth() + " "
 				+ timestamp.getHour() + ":" + timestamp.getMinute() + ":" + timestamp.getSecond() + " CST "
-				+ timestamp.getYear();
+				+ timestamp.getYear() + "\n";
 	}
 
 }
