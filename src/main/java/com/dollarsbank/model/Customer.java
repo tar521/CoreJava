@@ -8,6 +8,10 @@ public class Customer {
 	private String name;
 	private String address;
 	private String phone;
+	
+	public Customer() {
+		
+	}
 
 	public Customer(int id, String username, String password, String name, String address, String phone) {
 		super();

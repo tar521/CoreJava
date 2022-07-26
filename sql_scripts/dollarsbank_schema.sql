@@ -12,6 +12,9 @@ create table customer (
     primary key (id)
 );
 
+alter table customer
+modify column phone varchar(15);
+
 create table account(
 	id int not null auto_increment,
 	balance double,

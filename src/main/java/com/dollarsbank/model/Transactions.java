@@ -10,6 +10,10 @@ public class Transactions {
 	private LocalDateTime timestamp;
 	private int accountId;
 
+	public Transactions() {
+		
+	}
+	
 	public Transactions(int custId, String description, double transBalance, LocalDateTime timestamp, int accountId) {
 		super();
 		this.custId = custId;

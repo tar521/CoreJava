@@ -9,4 +9,10 @@ public interface CustomerDAO {
 	
 	public boolean login(String username, String password) throws SQLException;
 	//public Customer loadCustomer();
+
+	public Customer getUser();
+
+	public boolean uniqueUsername(String temp);
+
+	public boolean addCustomer(Customer newCust);
 }
