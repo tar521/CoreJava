@@ -15,4 +15,6 @@ public interface TransactionDAO {
 
 	void signOut();
 
+	public boolean addTransaction(Transactions with);
+
 }

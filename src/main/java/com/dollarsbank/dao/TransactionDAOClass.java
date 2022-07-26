@@ -6,9 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.dollarsbank.application.DollarsBankApplication;
+import com.dollarsbank.model.SavingsAccount;
 import com.dollarsbank.model.Transactions;
 
 public class TransactionDAOClass implements TransactionDAO {
@@ -108,9 +110,46 @@ public class TransactionDAOClass implements TransactionDAO {
 	}
 	
 	@Override
+	public boolean addTransaction(Transactions tran) {
+	
+		try {			
+			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO transactions(cust_id, description, trans_balance, timestamp, account_id) VALUES (?, ?, ?, ?, ?)");
+			pstmt.setInt(1, tran.getCustId());
+			pstmt.setString(2, tran.getDescription());
+			pstmt.setDouble(3, tran.getTransBalance());
+			pstmt.setString(4, tran.getTimestamp().toString());
+			pstmt.setInt(5, tran.getAccountId());
+			
+			int result = pstmt.executeUpdate();
+			
+			pstmt.close();
+			
+			if (result > 0) {
+				transactions.add(0, tran);
+				if (transactions.size() > 5) {
+					transactions.remove(5);
+				}
+				return true;
+			}
+			
+		}catch (SQLException e) {
+			System.out.println("Error Occurred - Please Terminate Program");
+		}
+		return false;
+	}
+	
+	@Override
 	public void signOut() {
 		transactions = null;
 	}
 
+	@Override
+	public String toString() {
+		String result = "";
+		for (Transactions t : transactions) {
+			result = result + t.toString();
+		}
+		return result;
+	}
 	
 }

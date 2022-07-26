@@ -16,6 +16,8 @@ import com.dollarsbank.dao.CustomerDAOClass;
 import com.dollarsbank.dao.TransactionDAO;
 import com.dollarsbank.dao.TransactionDAOClass;
 import com.dollarsbank.exceptions.IllegalOptionException;
+import com.dollarsbank.exceptions.InvalidAccountException;
+import com.dollarsbank.exceptions.InvalidWithdrawalException;
 import com.dollarsbank.exceptions.PasswordIncorrectException;
 import com.dollarsbank.model.Account;
 import com.dollarsbank.model.Customer;
@@ -231,11 +233,17 @@ public class DollarsBankController {
 				
 				switch (option) {
 				case 1: // Deposit
-					
+					accountAction("Deposit");
 					break;
 				case 2: // Withdraw
+					accountAction("Withdrawal");
 					break;
 				case 3: // Funds transfer
+					if (accDAO.getAccounts().size() < 2) {
+						System.out.println("\nCannot perform transfer: You have only one account\n");
+					} else {
+						//accountAction("Transfer");
+					}
 					break;
 				case 4: // view trans
 					System.out.println("5 Most Recent Transactions:\n");
@@ -265,18 +273,86 @@ public class DollarsBankController {
 	}
 	
 	private void accountAction(String action) {
-		String menu = action.replaceAll("[a-zA-Z]+", "-");
+		String menu = action.replaceAll("[a-zA-Z]", "-");
 		System.out.println();
 		System.out.println("+-" + menu + "--------+");
 		System.out.println("| " + action + " Wizard |");
 		System.out.println("+-" + menu + "--------+");
-		
-		System.out.println("Select Account for " + action);
-		System.out.println(accDAO);
-		System.out.print("Account ID: ");
-		
-		int option = sc.nextInt();
-		
+		do {
+			try {
+				System.out.println("[To cancel " + action + " input -1]");
+				System.out.println("Select Account for " + action);
+				System.out.println(accDAO);
+				System.out.print("Account ID: ");
+				
+				int option = sc.nextInt();
+				sc.nextLine();
+				
+				if (option == -1) {
+					return;
+				}
+				//VALID USER ACCOUNT
+				SavingsAccount acc = validUserAccount(option);
+				if (acc == null) {
+					throw new InvalidAccountException();
+				}
+				
+				System.out.println("\nInput non-zero amount to " + action + ":");
+				double amount = sc.nextDouble();
+				sc.nextLine();
+				
+				if (amount <= 0) {
+					throw new InputMismatchException();
+				}
+				
+				switch (action) {
+				case "Deposit":
+					acc.setBalance(amount + acc.getBalance());
+					Transactions dep = new Transactions(custDAO.getUser().getId(), "Deposit of " + amount + " for account ", acc.getBalance(), LocalDateTime.now(), acc.getId());
+					accDAO.updateAccountBalance(acc);
+					transDAO.addTransaction(dep);
+					System.out.println("\nSuccessful Deposit!");
+					System.out.println("Current Balance of account " + acc.getId() + ": " + acc.getBalance() + "\n");
+					break;
+				case "Withdrawal":
+					double newbal = acc.getBalance() - amount;
+					if (newbal >= 0) {
+						acc.setBalance(newbal);
+						Transactions with = new Transactions(custDAO.getUser().getId(), "Withdrawal of " + amount + " for account ", acc.getBalance(), LocalDateTime.now(), acc.getId());
+						accDAO.updateAccountBalance(acc);
+						transDAO.addTransaction(with);
+						System.out.println("\nSuccessful Withdrawal!");
+						System.out.println("Current Balance of account " + acc.getId() + ": " + acc.getBalance() + "\n");
+					}
+					else {
+						throw new InvalidWithdrawalException();
+					}
+					break;
+				case "Transfer":
+					break;
+				}
+				
+				return;
+				
+			} catch(InputMismatchException e) {
+				System.out.println("\nInput is not an account ID or is an invalid amount. Please chose a listed option.\n");
+			}catch (InvalidAccountException e) {
+				System.out.println("\nSelected Account is not Associated with your account. Try Again!");
+			}catch (InvalidWithdrawalException e) {
+				System.out.println("\nCannot Withdraw more than account balance.");
+			}
+		} while(true);
 	}
 
+	private SavingsAccount validUserAccount(int searchId) {
+		SavingsAccount result = null;
+		for (SavingsAccount s : accDAO.getAccounts()) {
+			if (s.getId() == searchId) {
+				result = s;
+				break;
+			}
+		}
+		return result;
+	}
+	
 }

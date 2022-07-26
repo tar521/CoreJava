@@ -1,6 +1,7 @@
 package com.dollarsbank.dao;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.dollarsbank.model.Customer;
 import com.dollarsbank.model.SavingsAccount;
@@ -11,6 +12,10 @@ public interface AccountDAO {
 
 	public boolean addAccount(String username,SavingsAccount acc);
 
-	void signOut();
+	public void signOut();
+
+	public List<SavingsAccount> getAccounts();
+
+	boolean updateAccountBalance(SavingsAccount acc);
 
 }

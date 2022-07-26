@@ -22,6 +22,10 @@ public class AccountDAOClass implements AccountDAO{
 	private List<SavingsAccount> accounts;
 	
 	@Override
+	public List<SavingsAccount> getAccounts() {
+		return accounts;
+	}
+	@Override
 	public void setAccounts(int userId) throws SQLException{
 		
 		accounts = new ArrayList<SavingsAccount>();
@@ -75,6 +79,29 @@ public class AccountDAOClass implements AccountDAO{
 		}catch(SQLException e) {
 			System.out.println("Error Occurred - Please Terminate Program");
 		}
+		return false;
+	}
+	
+	@Override
+	public boolean updateAccountBalance(SavingsAccount acc) {
+		
+		try {			
+			PreparedStatement pstmt = conn.prepareStatement("UPDATE account SET balance = ? WHERE id = ?");
+			pstmt.setDouble(1, acc.getBalance());
+			pstmt.setInt(2, acc.getId());
+			
+			int result = pstmt.executeUpdate();
+			
+			pstmt.close();
+			
+			if (result > 0) {
+				return true;
+			}
+			
+		}catch (SQLException e) {
+			System.out.println("Error Occurred - Please Terminate Program");
+		}
+		
 		return false;
 	}
 

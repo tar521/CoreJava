@@ -82,7 +82,7 @@ public class SavingsAccount implements Account {
 
 	@Override
 	public String toString() {
-		return "[id = " + id + ", dateCreated = " + dateCreated + ", accountType = "
-				+ accountType + "]" + "\n Balance: " + balance + "\n\n";
+		return "\n[id = " + id  + " | accountType = "
+				+ accountType + "]" + "\nBalance: " + balance + "\n";
 	}
 }
