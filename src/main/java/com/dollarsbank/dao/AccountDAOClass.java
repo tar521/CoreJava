@@ -59,7 +59,7 @@ public class AccountDAOClass implements AccountDAO{
 			rs.close();
 			prestmt.close();
 			
-			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO account(balance, data_created, type, cust_id) VALUES (?, ?, ?, ?)");
+			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO account(balance, date_created, type, cust_id) VALUES (?, ?, ?, ?)");
 			pstmt.setDouble(1, acc.getBalance());
 			pstmt.setString(2, acc.getDateCreated().toString());
 			pstmt.setString(3, acc.getAccountType());

@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.dollarsbank.application.DollarsBankApplication;
 import com.dollarsbank.dao.AccountDAO;
@@ -124,14 +126,18 @@ public class DollarsBankController {
 		
 		String passPattern  = "^(?=.*[0-9])"
                 + "(?=.*[a-z])(?=.*[A-Z])"
-                + "(?=.*[@#$%^&+=])"
+                + "(?=.*[!@#$%^&+=])"
                 + "(?=\\S+$).{8,20}$";
+		Pattern p = Pattern.compile(passPattern);		
 		
 		do {
 			System.out.println("Password: 8 Characters Min With Lower, Upper, Number, and Special");
 			String temp = sc.nextLine();
+			temp = temp.replaceAll("\n", "");
+			temp = temp.replaceAll("\\s", "");
+			Matcher m = p.matcher(temp);
 			
-			if (temp.matches(passPattern)) {
+			if (m.matches()) {
 				newCust.setPassword(temp);
 				break;
 			}
