@@ -1,5 +1,7 @@
 package com.dollarsbank.model;
 
+import com.dollarsbank.utility.ColorUtility;
+
 public class Customer {
 
 	private int id;
@@ -73,12 +75,12 @@ public class Customer {
 
 	@Override
 	public String toString() {
-		return "\nCONTACT INFO:"
+		return "\n" + ColorUtility.PURPLE_TEXT + "CONTACT INFO:" + ColorUtility.TEXT_RESET
 				+ "\nName:        \t" + name
 				+ "\nAddress:     \t" + address
 				+ "\nPhone #:     \t" + phone
 				
-				+ "\n\nACCOUNT INFO:"
+				+ "\n\n" + ColorUtility.PURPLE_TEXT + "ACCOUNT INFO:" + ColorUtility.TEXT_RESET
 				+ "\nCustomer ID: \t" + id
 				+ "\nUsername:    \t" + username
 				+ "\nPassword:    \t" + password

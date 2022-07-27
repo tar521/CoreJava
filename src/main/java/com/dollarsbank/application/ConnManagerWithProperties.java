@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import com.dollarsbank.utility.ColorUtility;
+
 // TO FIRST: Create a properties file before anything so that it is written out, an example
 // 			 is shown here in this project. Steps:
 //			 1. Right click on the project and select New -> Folder, name it "resources"
@@ -45,9 +47,13 @@ public class ConnManagerWithProperties {
 			connection = DriverManager.getConnection(url, username, password);
 			
 		} catch(SQLException e) {
+			System.out.println(ColorUtility.RED_TEXT);
 			e.printStackTrace();
+			System.out.println(ColorUtility.TEXT_RESET);
 		} catch(ClassNotFoundException e) {
+			System.out.println(ColorUtility.RED_TEXT);
 			e.printStackTrace();
+			System.out.println(ColorUtility.TEXT_RESET);
 		}
 		
 	}

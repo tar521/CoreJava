@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import com.dollarsbank.application.DollarsBankApplication;
 import com.dollarsbank.model.Customer;
+import com.dollarsbank.utility.ColorUtility;
 
 public class CustomerDAOClass implements CustomerDAO{
 	
@@ -75,7 +76,7 @@ public class CustomerDAOClass implements CustomerDAO{
 				return true;
 			}
 		} catch(SQLException e) {
-			System.out.println("Error Occured - Terminate program");
+			System.out.println(ColorUtility.RED_TEXT + "Error Occured - Terminate program" + ColorUtility.TEXT_RESET);
 			return false;
 		}
 	}
@@ -97,7 +98,7 @@ public class CustomerDAOClass implements CustomerDAO{
 				return true;
 			}
 		} catch(SQLException e) {
-			System.out.println("Error Occurred - Please Terminate Program");
+			System.out.println(ColorUtility.RED_TEXT + "Error Occurred - Please Terminate Program" + ColorUtility.TEXT_RESET);
 			return false;
 		}
 		return false;

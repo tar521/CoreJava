@@ -12,6 +12,7 @@ import java.util.List;
 import com.dollarsbank.application.DollarsBankApplication;
 import com.dollarsbank.model.SavingsAccount;
 import com.dollarsbank.model.Transactions;
+import com.dollarsbank.utility.ColorUtility;
 
 public class TransactionDAOClass implements TransactionDAO {
 
@@ -81,7 +82,7 @@ public class TransactionDAOClass implements TransactionDAO {
 				accId = rs.getInt("id");
 			}
 			else {
-				System.out.println("User not found - Please Terminate Program");
+				System.out.println(ColorUtility.RED_TEXT + "User not found - Please Terminate Program" + ColorUtility.TEXT_RESET);
 				return false;
 			}
 
@@ -104,7 +105,7 @@ public class TransactionDAOClass implements TransactionDAO {
 			}
 			
 		}catch (SQLException e) {
-			System.out.println("Error Occurred - Please Terminate Program");
+			System.out.println(ColorUtility.RED_TEXT + "Error Occurred - Please Terminate Program" + ColorUtility.TEXT_RESET);
 		}
 		return false;
 	}
@@ -133,7 +134,7 @@ public class TransactionDAOClass implements TransactionDAO {
 			}
 			
 		}catch (SQLException e) {
-			System.out.println("Error Occurred - Please Terminate Program");
+			System.out.println(ColorUtility.RED_TEXT + "Error Occurred - Please Terminate Program" + ColorUtility.TEXT_RESET);
 		}
 		return false;
 	}
