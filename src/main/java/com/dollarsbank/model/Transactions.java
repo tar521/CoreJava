@@ -2,6 +2,8 @@ package com.dollarsbank.model;
 
 import java.time.LocalDateTime;
 
+import com.dollarsbank.utility.ColorUtility;
+
 public class Transactions {
 
 	private int custId;
@@ -65,8 +67,9 @@ public class Transactions {
 
 	@Override
 	public String toString() {
-		return description + "[Customer: " + custId + "].\n"
-				+ "Balance - " + transBalance + " as on "
+		return description + "[Customer: " + custId + "].\n" + ColorUtility.GREEN_TEXT
+				+ "Account Id - " + accountId
+				+ "  Balance - " + transBalance + "\n" + ColorUtility.TEXT_RESET
 				+ timestamp.getDayOfWeek() + " "
 				+ timestamp.getMonth() + " "
 				+ timestamp.getDayOfMonth() + " "

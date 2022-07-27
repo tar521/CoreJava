@@ -1,6 +1,5 @@
 package com.dollarsbank.controller;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.InputMismatchException;
@@ -20,6 +19,7 @@ import com.dollarsbank.exceptions.InvalidAccountException;
 import com.dollarsbank.exceptions.InvalidWithdrawalException;
 import com.dollarsbank.exceptions.PasswordIncorrectException;
 import com.dollarsbank.model.Account;
+import com.dollarsbank.model.CheckingAccount;
 import com.dollarsbank.model.Customer;
 import com.dollarsbank.model.SavingsAccount;
 import com.dollarsbank.model.Transactions;
@@ -245,6 +245,7 @@ public class DollarsBankController {
 						System.out.println(ColorUtility.RED_TEXT + "\nCannot perform transfer: You have only one account\n" + ColorUtility.TEXT_RESET);
 					} else {
 						//accountAction("Transfer");
+						accountAction("Transfer");
 					}
 					break;
 				case 4: // view trans
@@ -256,8 +257,15 @@ public class DollarsBankController {
 				case 5: // view customer info
 					System.out.print(ColorUtility.TEXT_RESET);
 					System.out.println(custDAO.getUser());
+					System.out.println(ColorUtility.GREEN_TEXT);
+					System.out.println(accDAO);
+					System.out.println(ColorUtility.TEXT_RESET);
 					break;
-				case 6:
+				case 6: 
+					// Open New Account
+					openNewAccount();
+					break;
+				case 7:
 					custDAO.setUser(null);
 					accDAO.signOut();
 					transDAO.signOut();
@@ -287,8 +295,13 @@ public class DollarsBankController {
 		System.out.println("+-" + menu + "--------+" + ColorUtility.TEXT_RESET);
 		do {
 			try {
+				String prompt = (action.equals("Transfer")) 
+						? "Select Account To Transfer From:" 
+						: ("Select Account for " + action);
+				
+				
 				System.out.println(ColorUtility.TEXT_RESET + ColorUtility.PURPLE_TEXT + "[To cancel " + action + " input -1]" + ColorUtility.TEXT_RESET);
-				System.out.println("Select Account for " + action + ColorUtility.CYAN_TEXT);
+				System.out.println(prompt + ColorUtility.CYAN_TEXT);
 				System.out.println(accDAO);
 				System.out.println(ColorUtility.TEXT_RESET + "Account ID: " + ColorUtility.CYAN_TEXT);
 				
@@ -301,7 +314,7 @@ public class DollarsBankController {
 					return;
 				}
 				//VALID USER ACCOUNT
-				SavingsAccount acc = validUserAccount(option);
+				Account acc = validUserAccount(option);
 				if (acc == null) {
 					throw new InvalidAccountException();
 				}
@@ -339,6 +352,35 @@ public class DollarsBankController {
 					}
 					break;
 				case "Transfer":
+					System.out.println(ColorUtility.TEXT_RESET + "Select Account To Transfer To:");
+					System.out.println(ColorUtility.CYAN_TEXT);
+					System.out.println(accDAO.transferToString(option));
+					System.out.println(ColorUtility.TEXT_RESET + "Account ID: " + ColorUtility.CYAN_TEXT);
+					
+					int transferTo = sc.nextInt();
+					sc.nextLine();
+					System.out.print(ColorUtility.TEXT_RESET);
+					
+					Account transferToAcc = validUserAccount(transferTo);
+					if (transferToAcc == null) {
+						throw new InvalidAccountException();
+					}
+					double diff = acc.getBalance() - amount;
+					if (diff >= 0) {
+						acc.setBalance(diff);
+						transferToAcc.setBalance(amount);
+						Transactions tranfer = new Transactions(custDAO.getUser().getId(), "Transfer from account " + acc.getId() + " to account " + transferToAcc.getId() + " for " + amount + " ", transferToAcc.getBalance(), LocalDateTime.now(), transferToAcc.getId());
+						accDAO.updateAccountBalance(acc);
+						accDAO.updateAccountBalance(transferToAcc);
+						transDAO.addTransaction(tranfer);
+						System.out.println(ColorUtility.GREEN_TEXT + "\nSuccessful Trasfer!");
+						System.out.println(ColorUtility.PURPLE_TEXT + "Transfered From:\n" 
+										+ "Account: " + acc.getId() + "\n" 
+										+ "Balance: " + acc.getBalance() + "\n" + ColorUtility.TEXT_RESET);
+						System.out.println(ColorUtility.PURPLE_TEXT + "Transfered To:\n" 
+										+ "Account: " + transferToAcc.getId() + "\n" 
+										+ "Balance: " + transferToAcc.getBalance() + "\n" + ColorUtility.TEXT_RESET);
+					}
 					break;
 				}
 				
@@ -354,9 +396,59 @@ public class DollarsBankController {
 		} while(true);
 	}
 
-	private SavingsAccount validUserAccount(int searchId) {
-		SavingsAccount result = null;
-		for (SavingsAccount s : accDAO.getAccounts()) {
+	private void openNewAccount() {
+		
+		do {
+			DollarsBankApplication.newAccountMenu();
+			try {
+				System.out.print(ColorUtility.CYAN_TEXT);
+				int option = sc.nextInt();
+				sc.nextLine();
+				
+				System.out.println(ColorUtility.TEXT_RESET + "Input starting balance:" + ColorUtility.CYAN_TEXT);
+				double newbal = sc.nextDouble();
+				sc.nextLine();
+				System.out.print(ColorUtility.TEXT_RESET);
+				
+				if (newbal < 0) {
+					System.out.println(ColorUtility.RED_TEXT + "\nNew account cannot have negative balance.\n" + ColorUtility.TEXT_RESET);
+					continue;
+				}
+			
+				switch (option) {
+				case 1: // New Savings
+					openAccountUtil(new SavingsAccount(-1, newbal));
+					break;
+				case 2: // New Checking
+					openAccountUtil(new CheckingAccount(-1, newbal));
+					break;
+				default: 
+					throw new IllegalOptionException();
+				}
+				
+				System.out.println(ColorUtility.GREEN_TEXT + "\nAccount Opened!\n" + ColorUtility.TEXT_RESET);
+				return;
+			} catch (InputMismatchException e) {
+				System.out.println(ColorUtility.RED_TEXT + "\nInvalid input - Please input a listed option\n" + ColorUtility.TEXT_RESET);
+				sc.nextLine();
+			} catch(IllegalOptionException e) {
+				System.out.println(ColorUtility.RED_TEXT + "\nNot a listed option - Please input a listed option\n" + ColorUtility.TEXT_RESET);
+			}
+		} while(true);
+	}
+	
+	private void openAccountUtil(Account acc) {
+		Transactions trans;
+		int accId;
+		accId = accDAO.getAccounts().get(accDAO.getAccounts().size() - 1).getId();
+		trans = new Transactions(custDAO.getUser().getId(), "Initial Deposit Amount in account ", acc.getBalance(), LocalDateTime.now(), accId);
+		accDAO.addAccount(custDAO.getUser().getId(), acc);
+		transDAO.addTransaction(trans);
+	}
+	
+	private Account validUserAccount(int searchId) {
+		Account result = null;
+		for (Account s : accDAO.getAccounts()) {
 			if (s.getId() == searchId) {
 				result = s;
 				break;

@@ -6,11 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.dollarsbank.application.DollarsBankApplication;
-import com.dollarsbank.model.SavingsAccount;
 import com.dollarsbank.model.Transactions;
 import com.dollarsbank.utility.ColorUtility;
 

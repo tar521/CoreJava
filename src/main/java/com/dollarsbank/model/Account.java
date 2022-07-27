@@ -1,10 +1,22 @@
 package com.dollarsbank.model;
 
+import java.time.LocalDateTime;
+
 public interface Account {
 
-	public boolean transfer(Account acc);
-	public boolean withdrawal(double amount);
-	public boolean deposit(double amount);
-	public boolean createAccount();
-	public boolean deleteAccount();
+	int getId();
+
+	void setId(int id);
+
+	double getBalance();
+
+	void setBalance(double balance);
+
+	LocalDateTime getDateCreated();
+
+	String getAccountType();
+
+	void setDateCreated(LocalDateTime dateCreated);
+
+
 }

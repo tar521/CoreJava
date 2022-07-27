@@ -2,20 +2,20 @@ package com.dollarsbank.model;
 
 import java.time.LocalDateTime;
 
-public class SavingsAccount implements Account{
+public class CheckingAccount implements Account{
 
 	private int id;
 	private double balance;
 	private LocalDateTime dateCreated;
-	private final String accountType = "SAVINGS";
+	private final String accountType = "CHECKING";
 
-	public SavingsAccount() {
+	public CheckingAccount() {
 		id = -1;
 		balance = 0;
 		dateCreated = LocalDateTime.now();
 	}
 	
-	public SavingsAccount(int id, double balance) {
+	public CheckingAccount(int id, double balance) {
 		super();
 		this.id = id;
 		this.balance = balance;
