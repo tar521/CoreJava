@@ -26,6 +26,9 @@ create table account(
 		references customer (id)
 );
 
+alter table account
+modify column date_created varchar(30);
+
 create table transactions(
 	cust_id int not null,
     description varchar(255),
@@ -37,3 +40,6 @@ create table transactions(
 	foreign key (account_id)
 		references account (id)
 );
+
+alter table transactions
+modify column timestamp varchar(30);
