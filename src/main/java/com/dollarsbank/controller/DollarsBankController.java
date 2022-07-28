@@ -441,9 +441,9 @@ public class DollarsBankController {
 	private void openAccountUtil(Account acc) {
 		Transactions trans;
 		int accId;
+		accDAO.addAccount(custDAO.getUser().getId(), acc);
 		accId = accDAO.getAccounts().get(accDAO.getAccounts().size() - 1).getId();
 		trans = new Transactions(custDAO.getUser().getId(), "Initial Deposit Amount in account ", acc.getBalance(), LocalDateTime.now(), accId);
-		accDAO.addAccount(custDAO.getUser().getId(), acc);
 		transDAO.addTransaction(trans);
 	}
 	

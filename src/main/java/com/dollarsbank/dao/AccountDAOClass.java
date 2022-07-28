@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.dollarsbank.application.DollarsBankApplication;
 import com.dollarsbank.model.Account;
+import com.dollarsbank.model.CheckingAccount;
 import com.dollarsbank.model.SavingsAccount;
 import com.dollarsbank.utility.ColorUtility;
 
@@ -38,7 +39,12 @@ public class AccountDAOClass implements AccountDAO{
 		
 		ResultSet rs = pstmt.executeQuery();
 		while (rs.next()) {
-			accounts.add(new SavingsAccount(rs.getInt("id"), rs.getDouble("balance")));
+			if (rs.getString("type").equals("SAVINGS")) {
+				accounts.add(new SavingsAccount(rs.getInt("id"), rs.getDouble("balance")));
+			}
+			else {
+				accounts.add(new CheckingAccount(rs.getInt("id"), rs.getDouble("balance")));
+			}
 		}
 		rs.close();
 		pstmt.close();
