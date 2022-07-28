@@ -368,7 +368,7 @@ public class DollarsBankController {
 					double diff = acc.getBalance() - amount;
 					if (diff >= 0) {
 						acc.setBalance(diff);
-						transferToAcc.setBalance(amount);
+						transferToAcc.setBalance(amount + transferToAcc.getBalance());
 						Transactions tranfer = new Transactions(custDAO.getUser().getId(), "Transfer from account " + acc.getId() + " to account " + transferToAcc.getId() + " for " + amount + " ", transferToAcc.getBalance(), LocalDateTime.now(), transferToAcc.getId());
 						accDAO.updateAccountBalance(acc);
 						accDAO.updateAccountBalance(transferToAcc);
@@ -388,6 +388,7 @@ public class DollarsBankController {
 				
 			} catch(InputMismatchException e) {
 				System.out.println(ColorUtility.RED_TEXT + "\nInput is not an account ID or is an invalid amount. Please chose a listed option.\n" + ColorUtility.TEXT_RESET);
+				sc.nextLine();
 			}catch (InvalidAccountException e) {
 				System.out.println(ColorUtility.RED_TEXT + "\nSelected Account is not Associated with your account. Try Again!" + ColorUtility.TEXT_RESET);
 			}catch (InvalidWithdrawalException e) {
